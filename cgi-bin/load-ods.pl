@@ -1,4 +1,4 @@
-#!/usr/bin/env perl -T
+#!/usr/bin/perl -T
 
 # Copyright (C) 2010 by CPqD
 
