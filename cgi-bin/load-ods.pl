@@ -40,7 +40,7 @@ print
 
 print
     p("Baixe este ",
-      a({href => 'http://svn.cpqd.com.br/GTI/code/trunk/jira/jira-load-template.ods'}, 'modelo de planilha'),
+      a({href => '/jira-load-template.ods'}, 'modelo de planilha'),
       <<'EOS');
  e insira os dados dos tíquetes que você deseja carregar no JIRA. Cada
 tíquete é descrito por uma linha da planilha, que deve manter a
