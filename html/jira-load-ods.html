@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>.:: JIRA Carregador de Planilhas ODF</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="-1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+
+    <link rel="shortcut icon" href="http://jira.cpqd.com.br//jira/s/354/1/_/favicon.ico">
+    <link rel="icon" type="image/png" href="http://jira.cpqd.com.br//jira/s/354/1/_/images/icons/favicon.png">
+    <link rel="stylesheet" type="text/css" media="print" href="http://jira.cpqd.com.br/jira/s/354/1/_/styles/combined-printable.css">
+    <link type="text/css" rel="StyleSheet" media="all" href="http://jira.cpqd.com.br/jira/s/354/1/_/styles/combined.css"/>
+    <link type="text/css" rel="StyleSheet" media="all" href="http://jira.cpqd.com.br/jira/s/354/1/49/_/styles/global.css"/>
+    
+</head>
+<body bgcolor="#f0f0f0" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" link="#003366" vlink="#003366" alink="#660000">
+<div id="header">
+    <div id="header-top">
+        <a id="logo" href="/jira/secure/Dashboard.jspa"><img class="logo" src="http://jira.cpqd.com.br/jira/s/354/1/_/images/jira_logo_small.png" width="111" height="30" border="0" alt="CPqD"></a>
+    </div>
+    <div id="menu"><br/><br/></div>
+</div>
+<table border="0" cellpadding="5" cellspacing="0" width="100%" bgcolor="#ffffff">
+<tr><td valign="top">
+        <h1 class="pagetitle">Carregador de Planilhas ODF no JIRA</h1>
+            
+<table cellpadding="5" cellspacing="0" border="0" width="100%" align="center">
+<tr>
+        <td valign="top" width="50%">
+
+            <table class="tableBorder maxWidth" border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td>
+            <table border="0" cellpadding="3" cellspacing="1" width="100%">
+            <tr><td class="rowClear" colspan="2">
+            Modelo de Planilha!<br>
+            
+            <p>Baixe este <a href="http://svn.cpqd.com.br/GTI/code/trunk/jira/jira-load-template.ods">modelo de planilha</a> e insira os dados 
+            dos tíquetes que você deseja carregar no JIRA. </p>
+            <p>
+            Cada tíquete é descrito por uma linha da planilha, que deve manter a primeira linha intacta e não deve adicionar ou remover colunas</p>
+            </td></tr></table>
+            </td></tr></table>        
+            
+            <br/>
+        
+            <div class="maxWidth bgBorder">
+            <div class="colHeaderLink portletLoginHeader">
+                Parâmetros:
+            </div>
+            <div class="rowClear loginFormBox">
+                <form method="POST" action="/cgi-bin/jira-load-ods/jira-load-ods-cgi.pl" enctype="multipart/form-data" name="loginform">
+                <table align="center" cellpadding="4" cellspacing="0" border="0">
+                <tr>
+                    <td valign="middle" align="right" width="25%"><b><u>U</u>suário</b></td>
+                    <td valign="middle">
+                        <input class="login" type="text" name="jirauser" size="25" tabindex="1" accessKey="u" value="" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td valign="middle" align="right" width="25%"><b><u>S</u>enha</b></td>
+                    <td valign="middle">
+                        <input class="login" type="password" name="jirapass" size="25" tabindex="2" accessKey="s" />&nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" align="right" width="25%"><b><u>P</u>roduto</b></td>
+                    <td valign="middle">
+                        <input class="login" type="text" name="jiraprod" size="25" tabindex="3" accessKey="p" />&nbsp;
+                    </td>
+                </tr>
+
+                <tr>
+                    <td valign="middle" align="right" width="25%"><b>P<u>l</u>anilha</b></td>
+                    <td valign="middle">
+                        <input class="login" type="file" name="odsfile" tabindex="4" accessKey="l" />&nbsp;
+                    </td>
+                </tr>
+                
+            <tr>
+                <td valign="middle" align="center" colspan="2">
+                    <input id=".submit" name=".submit" type="submit" value="Enviar dados" tabindex="4" />
+                </td>
+            </tr>
+
+            <tr>
+                <td valign="middle" colspan="2">
+                    <br />Mais informações: <a href="http://wiki.cpqd.com.br/CDS/JIRAFAQ#poss_vel_carregar_t_quetes_no_JI">Consulte o FAQ do JIRA</a>
+                </td>
+            </tr>
+            </table>
+
+            </form>
+            
+            <script type="text/javascript">document.loginform.elements[0].focus();</script>
+            
+            </div>
+            </div>
+                    &nbsp;<br/>
+                                                                <div id="portletcc-10002">    
+                                            <p>
+                                                        
+                                            <p>
+                                                        
+                                            <p>
+
+                                                        
+                                            <p>
+                        <p>
+        </td>
+
+        <td valign="top" width="50%">                                                        
+            <p>
+            <style type="text/css">
+            .projectTable, .projectOuterTd {
+                border-collapse: collapse;
+                border: 1px solid #bbbbbb;
+            }
+
+            table.invalid {
+                width: 100%;
+                border: 1px #bbb solid;
+                border-collapse: collapse;
+                margin: 0;
+            }
+
+            table.invalid tbody tr td {
+                padding: 4px;
+                color: #000;
+                border: 1px #bbb inset;
+            }
+
+            table.invalid tbody tr td.message {
+                background-color: #fff;
+            }
+
+            table.invalid tbody tr td.actions {
+                font-size: x-small;
+            }
+            </style>
+        </td>
+    </tr>
+</table>
+
+</td></tr>
+</table>
+
+<div class="footer">
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+        <td bgcolor="#bbbbbb"><img src="/jira/s/354/1/_/images/border/spacer.gif" height="1" width="100" border="0" alt=""></td>
+    </tr>
+    <tr>
+        <td height="12" style="background-image:url(/jira/s/354/1/_/images/border/border_bottom.gif)"><img src="/jira/s/354/1/_/images/border/spacer.gif" width="1" height="1" border="0" alt=""></td>
+    </tr>
+</table>
+
+</div>
+
+</body>
+</html>
+
