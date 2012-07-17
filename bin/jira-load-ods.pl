@@ -34,14 +34,12 @@ use WWW::Mechanize;
 use HTML::TreeBuilder;
 use File::Copy;
 
-use FindBin;
-use lib ("$FindBin::Bin/../lib/perl", '/net/code/lib/perl');
-use CPqD::Utils;
-use CPqD::Constants;
+###############
+# CONFIGURATION
+my $JIRAURL = 'http://localhost:8080/'; # base JIRA URL
 
 # GROK COMMAND LINE
 my $usage   = "$0 [--jiraurl JIRAURL] [--dont] [--verbose] [--debug DIR] [--product JIRA-PRODUCT] ODSFILE ...\n";
-my $JIRAURL = $CPqD::Constants::JIRA{base_url}; # base JIRA URL
 my $Dont;
 my $Verbose;
 my $Debug;
