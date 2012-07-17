@@ -36,16 +36,30 @@ use File::Copy;
 
 ###############
 # CONFIGURATION
-my $JIRAURL = 'http://localhost:8080/'; # base JIRA URL
+my %JIRA = (
+    url    => 'http://localhost:8080',
+    fields => {		     # mapeamento de nome de campo para seu id
+	'Ambiente'                    => 'environment',
+	'Componentes'                 => 'components',
+	'Data para Ficar Pronto'      => 'duedate',
+	'Descrição'                   => 'description',
+	'Prioridade'                  => 'priority',
+	'Responsável'                 => 'assignee',
+	'Resumo'                      => 'summary',
+	'Versões'                     => 'fixVersions',
+    },
+);
 
+###################
 # GROK COMMAND LINE
+
 my $usage   = "$0 [--jiraurl JIRAURL] [--dont] [--verbose] [--debug DIR] [--product JIRA-PRODUCT] ODSFILE ...\n";
 my $Dont;
 my $Verbose;
 my $Debug;
 my $Product;
 GetOptions(
-    'jiraurl=s' => \$JIRAURL,
+    'jiraurl=s' => \$JIRA{url},
     'dont'      => \$Dont,
     'verbose+'  => \$Verbose,
     'debug=s'   => \$Debug,
@@ -288,7 +302,7 @@ sub load_jiras {
 	) {
 	    next unless $row->{$field};
 	    my $options = join("\n", map {"<option value=\"$_\" title=\"$_\">$_</option>"} split(' ', $row->{$field}));
-	    my $id      = $CPqD::Constants::JIRA{fields}{$field};
+	    my $id      = $JIRA{fields}{$field};
 
 	    if ((my $html = $jira->content) =~ s:(<select [^>]+name=\"$id\"[^>]*>):$1$options:s) {
 		$jira->update_html($html);
@@ -316,10 +330,10 @@ sub load_jiras {
 	) {
 	    next unless $row->{$field};
 	    if ($faked_select_fields) {
-		$jira->select($CPqD::Constants::JIRA{fields}{$field}
-				  => [option_id($tree, $CPqD::Constants::JIRA{fields}{$field}, $row->{$field})]);
+		$jira->select($JIRA{fields}{$field}
+				  => [option_id($tree, $JIRA{fields}{$field}, $row->{$field})]);
 	    } else {
-		$jira->field($CPqD::Constants::JIRA{fields}{$field} => encode_utf8($row->{$field}));
+		$jira->field($JIRA{fields}{$field} => encode_utf8($row->{$field}));
 	    }
 	    debug("load_jiras after rewriting field '$field'");
 	}
@@ -359,7 +373,7 @@ sub load_jiras {
 	    'Solicitação externa',
 	    'Story Points'
 	) {
-	    $jira->field($CPqD::Constants::JIRA{fields}{$field} => encode_utf8($row->{$field})) if $row->{$field};
+	    $jira->field($JIRA{fields}{$field} => encode_utf8($row->{$field})) if $row->{$field};
 	}
 
 	# Select fields
@@ -376,7 +390,7 @@ sub load_jiras {
 	    'Processo',
 	    'Projetos'
 	) {
-	    $jira->select($CPqD::Constants::JIRA{fields}{$field} => option_id($tree, $CPqD::Constants::JIRA{fields}{$field}, $row->{$field}))
+	    $jira->select($JIRA{fields}{$field} => option_id($tree, $JIRA{fields}{$field}, $row->{$field}))
 		if $row->{$field};
 	}
 
@@ -386,7 +400,7 @@ sub load_jiras {
 	    'Clientes',
 	    'Versões'
 	) {
-	    $jira->select($CPqD::Constants::JIRA{fields}{$field} => [option_id($tree, $CPqD::Constants::JIRA{fields}{$field}, $row->{$field})])
+	    $jira->select($JIRA{fields}{$field} => [option_id($tree, $JIRA{fields}{$field}, $row->{$field})])
 		if $row->{$field};
 	}
 
@@ -475,7 +489,7 @@ EOS
     ++$debug_id;
 }
 
-$jira->get("$JIRAURL/secure/Dashboard.jspa");
+$jira->get("$JIRA{url}/secure/Dashboard.jspa");
 debug('MAIN START');
 
 if ($jira->form_name('loginform')) {
