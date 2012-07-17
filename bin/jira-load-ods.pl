@@ -515,6 +515,26 @@ if ($jira->form_name('loginform')) {
 }
 
 {
+    sub get_credentials {
+	my ($userenv, $passenv, %opts) = @_;
+
+	require Term::Prompt; Term::Prompt->import();
+
+	$opts{prompt}      ||= '';
+	$opts{userhelp}    ||= '';
+	$opts{passhelp}    ||= '';
+	$opts{userdefault} ||= $ENV{USER};
+
+	my $user = $ENV{$userenv} || prompt('x', "$opts{prompt} Username: ", $opts{userhelp}, $opts{userdefault});
+	my $pass = $ENV{$passenv};
+	unless ($pass) {
+	    $pass = prompt('p', "$opts{prompt} Password: ", $opts{passhelp}, '');
+	    print "\n";
+	}
+
+	return ($user, $pass);
+    }
+
     my ($user, $pass) = get_credentials('jirauser', 'jirapass', prompt => 'JIRA');
     $debug->print("user=$user\n") if $Debug;
     $jira->set_fields(os_username => $user, os_password => $pass);
