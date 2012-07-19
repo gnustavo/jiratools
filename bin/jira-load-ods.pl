@@ -328,7 +328,6 @@ sub load_jiras {
 
 	foreach my $field (
 	    'Palavras chave',
-	    'Versão Planejada de Roadmap'
 	) {
 	    next unless $row->{$field};
 	    if ($faked_select_fields) {
@@ -363,16 +362,9 @@ sub load_jiras {
 
 	# Text fields
 	foreach my $field (
-	    'Ambiente',
-	    'Artefato(s) de Inspeção',
 	    'Business Value',
 	    'Data para Ficar Pronto',
 	    'Descrição',
-	    'Fase',
-	    'Justificativa',
-	    'Lista de inspeção',
-	    'Líder da Inspeção',
-	    'Solicitação externa',
 	    'Story Points'
 	) {
 	    $jira->field($JIRA{fields}{$field} => encode_utf8($row->{$field})) if $row->{$field};
@@ -380,17 +372,7 @@ sub load_jiras {
 
 	# Select fields
 	foreach my $field (
-	    'Causa raiz',
-	    'Classificação',
-	    'Funcionalidade',
-	    'Grau de importância',
-	    'Grupo funcional',
-	    'Módulo',
-	    'Motivo',
-	    'Método de inspeção',
 	    'Prioridade',
-	    'Processo',
-	    'Projetos'
 	) {
 	    $jira->select($JIRA{fields}{$field} => option_id($tree, $JIRA{fields}{$field}, $row->{$field}))
 		if $row->{$field};
@@ -399,7 +381,6 @@ sub load_jiras {
 	# Multiple select fields
 	for my $field (
 	    'Componentes',
-	    'Clientes',
 	    'Versões'
 	) {
 	    $jira->select($JIRA{fields}{$field} => [option_id($tree, $JIRA{fields}{$field}, $row->{$field})])
