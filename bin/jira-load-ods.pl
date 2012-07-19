@@ -459,6 +459,9 @@ sub load_jiras {
 
 my $jira = WWW::Mechanize->new(stack_depth => 0, autocheck => 1);
 
+# See: https://developer.atlassian.com/display/JIRADEV/Form+Token+Handling
+$jira->add_header('X-Atlassian-Token' => 'no-check');
+
 # Generic function to produce error messages with lots of information
 # about the scraping context.
 
