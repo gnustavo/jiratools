@@ -39,14 +39,17 @@ use File::Copy;
 my %JIRA = (
     url    => 'http://localhost:8080',
     fields => {		     # mapeamento de nome de campo para seu id
-	'Ambiente'                    => 'environment',
-	'Componentes'                 => 'components',
-	'Data para Ficar Pronto'      => 'duedate',
-	'Descrição'                   => 'description',
-	'Prioridade'                  => 'priority',
-	'Responsável'                 => 'assignee',
-	'Resumo'                      => 'summary',
-	'Versões'                     => 'fixVersions',
+	'Ambiente'               => 'environment',
+	'Componentes'            => 'components',
+	'Data para Ficar Pronto' => 'duedate',
+	'Descrição'              => 'description',
+	'Prioridade'             => 'priority',
+	'Responsável'            => 'assignee',
+	'Resumo'                 => 'summary',
+	'Versões'                => 'fixVersions',
+	'Rótulos'                => 'customfield_10112',
+	'Story points'           => 'customfield_10002',
+	'Business value'         => 'customfield_10003',
     },
 );
 
@@ -298,7 +301,6 @@ sub load_jiras {
 	my $faked_select_fields;
 	foreach my $field (
 	    'Palavras chave',
-	    'Versão Planejada de Roadmap'
 	) {
 	    next unless $row->{$field};
 	    my $options = join("\n", map {"<option value=\"$_\" title=\"$_\">$_</option>"} split(' ', $row->{$field}));
