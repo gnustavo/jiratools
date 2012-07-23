@@ -29,6 +29,7 @@ use List::Util qw(first);
 use Data::Dumper;
 
 use OpenOffice::OODoc;
+odfLocalEncoding 'utf8';
 use LWP '5.836';		# version 5.820 has a bug in encoding non-ASCII post arguments
 use WWW::Mechanize;
 use HTML::TreeBuilder;
@@ -115,7 +116,7 @@ sub read_spreadsheet {
     # I think this shouldn't be necessary, but we need to force the
     # encodind of the text gotten from the spreadsheet.
     foreach my $row (@rows) {
-	$row = [map {odfEncodeText($_)} @$row];
+	$row = [map {Encode::decode_utf8($_)} @$row];
     }
 
     my $headers = shift @rows
@@ -334,12 +335,12 @@ sub load_jiras {
 		$jira->select($JIRA{fields}{$field}
 				  => [option_id($tree, $JIRA{fields}{$field}, $row->{$field})]);
 	    } else {
-		$jira->field($JIRA{fields}{$field} => encode_utf8($row->{$field}));
+		$jira->field($JIRA{fields}{$field} => $row->{$field});
 	    }
 	    debug("load_jiras after rewriting field '$field'");
 	}
 
-	$jira->field(summary => encode_utf8($row->{Resumo}));
+	$jira->field(summary => $row->{Resumo});
 
         # Campo Responsável: Note that an empty string means that the
         # assignee will be the default one and not that there will be
@@ -350,14 +351,14 @@ sub load_jiras {
 		or die "$line: Invalid 'Responsável' ($assignee): It must be a username.\n";
 
 	    $assignee = '' if $assignee =~ /^Nenhum$/i;
-	    $jira->field(assignee => encode_utf8($assignee));
+	    $jira->field(assignee => $assignee);
 	}
 
 	if (my $time = $row->{Estimativa}) {
 	    my $period = qr/\d+[wdhm]/;
 	    $time =~ /^$period(?:\s+$period)*$/
 		or die "$line: Invalid 'Estimativa' ($time): The format of this is '*w *d *h *m' (representing weeks, days, hours, and minutes - where * can be any number). Examples: 4d, 5h 30m, 60m, and 3w.)\n";
-	    $jira->field(timetracking => encode_utf8($time));
+	    $jira->field(timetracking => $time);
 	}
 
 	# Text fields
@@ -367,7 +368,7 @@ sub load_jiras {
 	    'Descrição',
 	    'Story Points'
 	) {
-	    $jira->field($JIRA{fields}{$field} => encode_utf8($row->{$field})) if $row->{$field};
+	    $jira->field($JIRA{fields}{$field} => $row->{$field}) if $row->{$field};
 	}
 
 	# Select fields
