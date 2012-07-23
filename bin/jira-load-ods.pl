@@ -112,7 +112,7 @@ sub read_spreadsheet {
 
     my @rows = $ods->getTableText(0);
 
-    # I think this shouldn't be necessary, be we need to force the
+    # I think this shouldn't be necessary, but we need to force the
     # encodind of the text gotten from the spreadsheet.
     foreach my $row (@rows) {
 	$row = [map {odfEncodeText($_)} @$row];
