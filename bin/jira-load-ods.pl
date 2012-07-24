@@ -363,6 +363,7 @@ sub load_jiras {
 
 	# Text fields
 	foreach my $field (
+	    'Ambiente',
 	    'Business Value',
 	    'Data para Ficar Pronto',
 	    'Descrição',
