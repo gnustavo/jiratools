@@ -354,11 +354,11 @@ sub load_jiras {
 	    $jira->field(assignee => $assignee);
 	}
 
-	if (my $time = $row->{Estimativa}) {
+	if (my $time = $row->{'Tempo Estimado'}) {
 	    my $period = qr/\d+[wdhm]/;
 	    $time =~ /^$period(?:\s+$period)*$/
-		or die "$line: Invalid 'Estimativa' ($time): The format of this is '*w *d *h *m' (representing weeks, days, hours, and minutes - where * can be any number). Examples: 4d, 5h 30m, 60m, and 3w.)\n";
-	    $jira->field(timetracking => $time);
+		or die "$line: Invalid 'Tempo Estimado' ($time): The format of this is '*w *d *h *m' (representing weeks, days, hours, and minutes - where * can be any number). Examples: 4d, 5h 30m, 60m, and 3w.)\n";
+	    $jira->field(timetracking_originalestimate => $time);
 	}
 
 	# Text fields
