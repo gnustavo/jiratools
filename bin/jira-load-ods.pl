@@ -290,18 +290,18 @@ sub load_jiras {
 	}
 
 	# Insert a mark in every ticket created by this load
-	if ($row->{'Palavras chave'}) {
-	    $row->{'Palavras chave'} .= " load_ods";
+	if ($row->{'Rótulos'}) {
+	    $row->{'Rótulos'} .= " load_ods";
 	} else {
-	    $row->{'Palavras chave'} = "load_ods";
+	    $row->{'Rótulos'} = "load_ods";
 	}
 
-	# Fields like 'Palavras chave', which were text fields until
+	# Fields like 'Rótulos', which were text fields until
 	# JIRA 4.3, became a JavaScript generated select list in JIRA
 	# 4.4. So, we have to fake them.
 	my $faked_select_fields;
 	foreach my $field (
-	    'Palavras chave',
+	    'Rótulos',
 	) {
 	    next unless $row->{$field};
 	    my $options = join("\n", map {"<option value=\"$_\" title=\"$_\">$_</option>"} split(' ', $row->{$field}));
@@ -328,7 +328,7 @@ sub load_jiras {
 	my $tree = HTML::TreeBuilder->new_from_content($jira->content);
 
 	foreach my $field (
-	    'Palavras chave',
+	    'Rótulos',
 	) {
 	    next unless $row->{$field};
 	    if ($faked_select_fields) {
