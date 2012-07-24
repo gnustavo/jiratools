@@ -235,7 +235,7 @@ sub goto_create_subticket_page {
 	or $jira->form_name('jiraform')	   # This works until JIRA 4.3
 	    or scraping_error(goto_create_subticket_page => "Can't find neither 'subtask-create-start' nor 'jiraform' forms");
 
-    if (eval {$jira->select(issuetype => option_id($tree, 'issuetype', 'Sub-tarefa'))}) {
+    if (eval {$jira->select(issuetype => option_id($tree, 'issuetype', 'Sub-task'))}) {
 	$jira->submit;
 	debug('goto_create_subticket_page SUBTASK SELECTED');
     }
@@ -278,9 +278,9 @@ sub load_jiras {
     $last_ticket = undef;
     foreach my $row (@$rows) {
 	++$line;
-	if ($row->{Tipo} eq 'Sub-tarefa') {
+	if ($row->{Tipo} eq 'Sub-task') {
 	    my $parent_id = $row->{Mãe} || $last_ticket;
-	    warn "$line: Sub-tarefa[$parent_id] '$row->{Resumo}'\n" if $Verbose;
+	    warn "$line: Sub-task[$parent_id] '$row->{Resumo}'\n" if $Verbose;
 	    goto_create_subticket_page($jira, $parent_id);
 	}
 	else {
@@ -398,7 +398,7 @@ sub load_jiras {
 	warn "  -> $ticket_id\n" if $Verbose;
 
 	$last_ticket = $ticket_id
-	    unless $row->{Tipo} eq 'Sub-tarefa';
+	    unless $row->{Tipo} eq 'Sub-task';
 
 	$tree->delete;
 
