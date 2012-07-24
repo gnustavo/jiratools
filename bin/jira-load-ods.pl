@@ -48,7 +48,7 @@ my %JIRA = (
 	'Responsável'            => 'assignee',
 	'Resumo'                 => 'summary',
 	'Versões'                => 'fixVersions',
-	'Rótulos'                => 'customfield_10112',
+	'Rótulos'                => 'labels',
 	'Story points'           => 'customfield_10002',
 	'Business value'         => 'customfield_10003',
     },
