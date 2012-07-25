@@ -22,8 +22,15 @@ use strict;
 use warnings;
 use File::Temp qw/tempfile tempdir/;
 use File::Copy;
+use File::Spec::Functions qw/catfile tmpdir/;
 use POSIX qw(strftime);
 use CGI ':standard';
+
+###############
+# CONFIGURATION
+my $TMPDIR = tmpdir();
+my $INSTALLDIR = '/home/user/jiratools';
+my $JIRAURL = 'http://localhost:8080';
 
 $| = 1;				# don't buffer output
 
@@ -93,7 +100,7 @@ if (param()) {
 
     my $debug = detaint(debug    => qr/^(--debug|)$/);
 
-    my $tmpdir = tempdir(strftime('%F_%T_XXXX', localtime), DIR => '/l/home1/jiratools/load-ods');
+    my $tmpdir = tempdir(strftime('load-ods-%F_%T_XXXX', localtime), TMPDIR => 1);
 
     if ($debug) {
 	$debug .= " $tmpdir";
@@ -104,19 +111,20 @@ if (param()) {
     my $in_ods     = upload('odsfile');
 
     # Copy the odsfile spreadsheet to a temporary file
-    copy($in_ods, "$tmpdir/spreadsheet.ods")
+    my $odscopy = catfile($tmpdir, 'spreadsheet.ods');
+    copy($in_ods, $odscopy)
 	or error "Não consegui copiar a planilha no servidor: $!\n";
 
     # Load the spreadsheet
     print p("# Carregando a planilha..."), "\n";
-    my $loader = '/net/code/jira/jira-load-ods.pl';
+    my $loader = catfile($INSTALLDIR, 'bin', 'jira-load-ods.pl');
     my $product_opt = $jiraprod ? "--product \"$jiraprod\"" : '';
-    open LOADER, '-|:utf8', "$loader --verbose $debug $product_opt \"$tmpdir/spreadsheet.ods\" 2>&1"
+    open LOADER, '-|:utf8', "$loader --verbose $debug $product_opt \"$odscopy\" 2>&1"
 	or error "Não consegui executar o comando $loader: $!";
     print '<p>';
     while (<LOADER>) {
 	# Insert a link to the ticket
-	s@\b([A-Z]+-\d+)\b@a({href => "http://jira.cpqd.com.br/browse/$1"}, $1)@e;
+	s@\b([A-Z]+-\d+)\b@a({href => "$JIRAURL/browse/$1"}, $1)@e;
 	print $_, br, "\n";
     }
     print '</p>';
