@@ -52,8 +52,8 @@ print
  e insira os dados dos tíquetes que você deseja carregar no JIRA. Cada
 tíquete é descrito por uma linha da planilha, que deve manter a
 primeira linha intacta e não deve adicionar ou remover colunas.
-Se você especificar o nome de um produto JIRA abaixo ele será usado
-para as linhas da planilha que não especificarem a coluna Produto. A
+Se você especificar o nome de um projeto JIRA abaixo ele será usado
+para as linhas da planilha que não especificarem a coluna Projeto. A
 palavra-chave "load_ods" será automaticamente adicionada aos tíquetes
 criados para que você possa buscá-los posteriormente.
 EOS
@@ -62,7 +62,7 @@ print
     start_multipart_form,
     p("Usuário JIRA:", textfield('jirauser')),
     p("Senha JIRA:", password_field('jirapass')),
-    p("Produto JIRA:", textfield('jiraprod')),
+    p("Projeto JIRA:", textfield('jiraproj')),
     p("Planilha preenchida:", filefield('odsfile')),
     p({-style => 'font-size: small'},
       checkbox(-name => 'debug', -checked => 1, -value => '--debug'),
@@ -107,7 +107,7 @@ if (param()) {
 	print p("# Logs detalhados serão gerados no servidor em '$tmpdir'."), "\n";
     }
 
-    my $jiraprod   = detaint(jiraprod => qr/^(.{0,80})$/);
+    my $jiraproj   = detaint(jiraproj => qr/^(.{0,80})$/);
     my $in_ods     = upload('odsfile');
 
     # Copy the odsfile spreadsheet to a temporary file
@@ -118,8 +118,8 @@ if (param()) {
     # Load the spreadsheet
     print p("# Carregando a planilha..."), "\n";
     my $loader = catfile($INSTALLDIR, 'bin', 'jira-load-ods.pl');
-    my $product_opt = $jiraprod ? "--product \"$jiraprod\"" : '';
-    open LOADER, '-|:utf8', "$loader --verbose $debug $product_opt \"$odscopy\" 2>&1"
+    my $project_opt = $jiraproj ? "--project \"$jiraproj\"" : '';
+    open LOADER, '-|:utf8', "$loader --verbose $debug $project_opt \"$odscopy\" 2>&1"
 	or error "Não consegui executar o comando $loader: $!";
     print '<p>';
     while (<LOADER>) {
