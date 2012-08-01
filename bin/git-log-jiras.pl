@@ -11,18 +11,19 @@ use App::gh::Git;
 ######################
 # Global Configuration
 
-my $JIRAURL = 'https://jira.example.com';
 my $jirakey = qr/\b[A-Z][A-Z]+-\d+\b/;
 
 ###################
 # Option processing
 
-my $usage   = "$0 [--gitdir=DIR] [--[no]jira] [COMMIT..COMMIT]\n";
+my $usage   = "$0 [--jiraurl=URL] [--gitdir=DIR] [--[no]jira] [COMMIT..COMMIT]\n";
+my $JIRAURL = 'https://jira.example.com';
 my $GitDir = '.';
 my $JIRA   = 1;
 GetOptions(
-    'gitdir=s' => \$GitDir,
-    'jira!'    => \$JIRA,
+    'jiraurl=s' => \$JIRAURL,
+    'gitdir=s'  => \$GitDir,
+    'jira!'     => \$JIRA,
 ) or die $usage;
 
 ######################
