@@ -32,29 +32,50 @@ GetOptions(
 my $git = App::gh::Git->repository(Directory => $GitDir);
 
 my @commits;
+
 {
     # See 'git help log' to understand the --pretty argument
     my ($pipe, $ctx) = $git->command_output_pipe('log', '-z', '--date=iso', '--name-only', @ARGV);
-    local $/ = "\x00\x00";
+    local $/ = "\x00";
     while (<$pipe>) {
 	chomp;
-	my ($commit, $author, $date, undef, @body) = split /\n/;
-	$commit =~ s/^commit\s+//  or die "Cannot grok commit line from $_";
-	$author =~ s/^Author:\s+// or die "Cannot grok author line from $_";
-	$date   =~ s/^Date:\s+//   or die "Cannot grok date   line from $_";
-	my $msg;
-	while (@body && $body[0] =~ /^ {4}(.*)/) {
-	    $msg .= "$1\n";
-	    shift @body;
+	next unless length;
+	if (/^commit /) {
+	    # Start of a new commit
+	    my %c;
+	    if (/^commit\s+([0-9a-f]{40})/) {
+		$c{commit} = $1;
+	    } else {
+		die "Cannot grok commit line from: $_";
+	    }
+
+	    if (/^Author:\s+(.*)/m) {
+		$c{author} = $1;
+	    } else {
+		die "Cannot grok author line from: $_";
+	    }
+
+	    if (/^Date:\s+(.*)/m) {
+		$c{date} = $1;
+	    } else {
+		die "Cannot grok date line from: $_";
+	    }
+
+	    while (/^ {4}(.*)/mgc) {
+		$c{msg} .= "$1\n";
+	    }
+
+	    if (/\G\n\n(.*)/s) {
+		$c{files} = [$1];
+	    } else {
+		$c{files} = [];
+	    }
+
+	    push @commits, \%c;
+	} else {
+	    # Another file affected by the current commit
+	    push @{$commits[-1]{files}}, $_;
 	}
-	shift @body;		# skip a blank line before the file list
-	push @commits, {
-	    commit => $commit,
-	    author => $author,
-	    date   => $date,
-	    msg    => $msg,
-	    files  => \@body,
-	};
     }
     $git->command_close_pipe($pipe, $ctx);
 }
