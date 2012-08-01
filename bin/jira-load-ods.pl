@@ -57,17 +57,17 @@ my %JIRA = (
 ###################
 # GROK COMMAND LINE
 
-my $usage   = "$0 [--jiraurl JIRAURL] [--dont] [--verbose] [--debug DIR] [--product JIRA-PRODUCT] ODSFILE ...\n";
+my $usage   = "$0 [--jiraurl JIRAURL] [--dont] [--verbose] [--debug DIR] [--project JIRA-PROJECT] ODSFILE ...\n";
 my $Dont;
 my $Verbose;
 my $Debug;
-my $Product;
+my $Project;
 GetOptions(
     'jiraurl=s' => \$JIRA{url},
     'dont'      => \$Dont,
     'verbose+'  => \$Verbose,
     'debug=s'   => \$Debug,
-    'product=s' => \$Product,
+    'project=s' => \$Project,
 ) or die $usage;
 
 not defined $Debug or -d $Debug or die "Not a directory: '$Debug'\n";
@@ -80,7 +80,7 @@ if ($Debug) {
     $debug->print("--dont ") if $Dont;
     $debug->print("--verbose ") if $Verbose;
     $debug->print("--debug $Debug ") if $Debug;
-    $debug->print("--product '$Product' ") if $Product;
+    $debug->print("--project '$Project' ") if $Project;
     $debug->print(join(' ', @ARGV));
     $debug->print("\n");
 }
@@ -182,12 +182,12 @@ sub option_id {
 # Sub goto_create_ticket_page receives the WWW::Mechanize $jira object
 # and a string specifying the $type of the ticket that we're going to
 # create, which must be a parent ticket and not a sub-task. It gets
-# the CreateIssue page and selects the appropriate product and ticket
+# the CreateIssue page and selects the appropriate project and ticket
 # type from the form, leaving the $jira object facing the page where
 # the ticket fields must be entered.
 
 sub goto_create_ticket_page {
-    my ($jira, $type, $product) = @_;
+    my ($jira, $type, $project) = @_;
 
     $jira->get('/secure/CreateIssue!default.jspa');
     debug('goto_create_ticket_page BEGIN');
@@ -202,7 +202,7 @@ sub goto_create_ticket_page {
 
     my $tree = HTML::TreeBuilder->new_from_content($jira->content);
 
-    $jira->select(pid       => option_id($tree, 'pid',       $product));
+    $jira->select(pid       => option_id($tree, 'pid',       $project));
     $jira->select(issuetype => option_id($tree, 'issuetype', $type   ));
     $jira->submit;
     debug('goto_create_ticket_page END');
@@ -226,7 +226,7 @@ sub goto_create_subticket_page {
 
     my $tree = HTML::TreeBuilder->new_from_content($jira->content);
 
-    # If the product can have only one type of sub-task then we go
+    # If the project can have only one type of sub-task then we go
     # directly to the create sub-task form. However, if there is more
     # than one possibility, then we have to select the appropriate
     # type first.
@@ -285,8 +285,8 @@ sub load_jiras {
 	}
 	else {
 	    warn "$line: $row->{Tipo} '$row->{Resumo}'\n" if $Verbose;
-	    my $product = $row->{Produto} || $Product;
-	    goto_create_ticket_page($jira, $row->{Tipo}, $product);
+	    my $project = $row->{Projeto} || $Project;
+	    goto_create_ticket_page($jira, $row->{Tipo}, $project);
 	}
 
 	# Insert a mark in every ticket created by this load
@@ -549,13 +549,13 @@ scraping_error(MAIN => "couldn't log in")
 foreach my $file (@ARGV) {
     my $spreadsheet = read_spreadsheet($file);
 
-    # If we don't have a default Product we have to have a product
+    # If we don't have a default Project we have to have a project
     # specified in every row. Let's check this before creating the
     # first issue.
-    unless ($Product) {
+    unless ($Project) {
 	for (my $i=0; $i <= $#{$spreadsheet}; ++$i) {
-	    die 'No default product has been specified and line ', $i+1, " has an empty cell 'Produto'.\n"
-		unless $spreadsheet->[$i]{Produto};
+	    die 'No default project has been specified and line ', $i+1, " has an empty cell 'Projeto'.\n"
+		unless $spreadsheet->[$i]{Projeto};
 	}
     }
 
