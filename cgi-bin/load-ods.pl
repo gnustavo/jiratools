@@ -65,7 +65,7 @@ print
     p("Projeto JIRA:", textfield('jiraproj')),
     p("Planilha preenchida:", filefield('odsfile')),
     p({-style => 'font-size: small'},
-      checkbox(-name => 'debug', -checked => 1, -value => '--debug'),
+      checkbox(-name => 'debug', -checked => 0, -value => '--debug'),
       "(Marque se quiser gerar logs detalhados de depuração para os administradores.)"),
     submit,
     end_form,
