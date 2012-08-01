@@ -29,7 +29,7 @@ GetOptions(
 ######################
 # Grok git commit logs
 
-my $git = Git->repository(Directory => $GitDir);
+my $git = App::gh::Git->repository(Directory => $GitDir);
 
 my @commits;
 {
