@@ -1,14 +1,16 @@
 JIRAtools - A bunch of tools to work with JIRA.
 
-WARNING: THIS IS IN BETA STATUS AND IS VERY UGLY. I MEAN IT!!!
+WARNING: THIS IS IN BETA STATUS!!!
 
-Currently this package contains a script (bin/jira-load-ods.pl) that
-you can use to create JIRA issues from a spreadsheet. You can read its
-sparse documentation with 'perldoc jira-load-ods.pl'.
+* bin/jira-load-ods.pl: a script to create JIRA issues from a ODF
+  spreadsheet.
 
-There is also an Apache site configuration (apache/jiratools.conf) and
-a CGI script (cgi-bin/load-ods.pl) that you can use to setup a web
-form to upload a spreadsheet.
+* cgi-bin/load-ods.pl: a CGI script to invoke jira-load-ods.pl via a
+  web interface. The file apache/jiratools.conf has an Apache site
+  configuration that you can use to set this up.
+
+* bin/git-log-jiras.pl: a script to produce a textual report about
+  every JIRA issue cited in a sequence of git commits.
 
 Copyright (c) 2012 by CPqD (http://www.cpqd.com.br/)
 
