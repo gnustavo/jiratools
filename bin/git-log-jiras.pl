@@ -105,6 +105,7 @@ if ($JIRA) {
 	    warn "WARN: cannot get issue '$key': $@\n";
 	    next;
 	}
+	no warnings;		# avoid warnings for uninitialized keys
 	say '"', join('","' => @{$issue}{qw/key assignee summary/}), '"';
     }
 } else {
