@@ -16,7 +16,7 @@ my $jirakey = qr/\b[A-Z][A-Z]+-\d+\b/;
 ###################
 # Option processing
 
-my $usage   = "$0 [--jiraurl=URL] [--gitdir=DIR] [--[no]jira] [COMMIT..COMMIT]\n";
+my $usage   = "$0 [--jiraurl=URL] [--gitdir=DIR] [--[no]jira] [-- <git log args>]\n";
 my $JIRAURL = 'https://jira.example.com';
 my $GitDir = '.';
 my $JIRA   = 1;
@@ -153,7 +153,7 @@ git-log-jiras.pl - Grok info about JIRA keys cited in Git logs.
 
 =head1 SYNOPSIS
 
-git-log-jiras.pl [--gitdir=DIR] [--[no]jira] [COMMIT..COMMIT]
+git-log-jiras.pl [--gitdir=DIR] [--[no]jira] [-- <git log arguments>]
 
 =head1 DESCRIPTION
 
@@ -161,10 +161,9 @@ This script generates a text report (in CSV format) summarizing
 information about each and every JIRA key cited in a list of Git
 commit messages.
 
-The list of commits is specified by the optional C<COMMIT..COMMIT>
-argument, which is passed to the C<git log> command. You should read
-C<git help log> documentation to understand how can you specify the
-commits you want.
+Everything after an optional double-dash (--) is passed as extra
+arguments to the C<git log> command. You should read C<git help log>
+documentation to understand how can you specify the commits you want.
 
 The report has two parts separated by a blank link, in the following
 format:
