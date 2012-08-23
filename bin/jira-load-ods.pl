@@ -410,22 +410,14 @@ sub load_jiras {
 	    $jira->follow_link(id => 'link-issue')
 		or scraping_error(load_jiras => "$line: Can't go to the Link page");
 	    debug('load_jiras FOLLOWED LINK-ISSUE');
-	    if ((my $html = $jira->content) =~ s:(data-ajax-options.data.current-project-id="">)\s+(</select>):$1<option value="$linkkey">$linkkey</option>$2:s) {
-		# From JIRA 4.4 on this select tag content is empty
-		# because it is generated on the fly by javascript.
-		# We need to fake HTML inside in order to
-		# WWW::Mechanize properly understand it.
-		$jira->update_html($html);
-		$jira->form_id('issue-link')
-		    or die "$line: Can't find jiraform for ticket linking.\n";
-		$jira->select(linkKey => $linkkey);
-	    } else {
-		$jira->form_name('jiraform') # Up to JIRA 4.3
-		    or die "$line: Can't find jiraform for ticket linking.\n";
-		$jira->field(linkKey => $linkkey)
-		    or scraping_error(load_jiras => "can't find 'linkKey' field");
-	    }
-	    $tree = HTML::TreeBuilder->new_from_content($jira->content);
+	    my $html = $jira->content;
+	    # The following select fixtures are needed for JIRA 5.1
+	    $html =~ s@(data-ajax-options.data.app-id="">)\s+(</select>)@$1<option value="$linkkey">$linkkey</option>$2@s;
+	    $jira->update_html($html);
+	    $tree = HTML::TreeBuilder->new_from_content($html);
+	    $jira->form_id('link-jira-issue')
+		or die "$line: Can't find link-jira-issue select for ticket linking.\n";
+	    $jira->select(issueKeys => $linkkey);
 	    $jira->select(linkDesc => option_id($tree, 'linkDesc', $linktype))
 		or scraping_error(load_jiras => "$line: Can't select Link '$linktype'");
 	    $jira->submit();
