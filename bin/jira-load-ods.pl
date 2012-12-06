@@ -51,6 +51,7 @@ my %JIRA = (
 	'Rótulos'                => 'labels',
 	'Story points'           => 'customfield_10002',
 	'Business value'         => 'customfield_10003',
+	'ID Mantis'              => 'customfield_10300',
     },
 );
 
@@ -367,6 +368,7 @@ sub load_jiras {
 	    'Business Value',
 	    'Data para Ficar Pronto',
 	    'Descrição',
+	    'ID Mantis',
 	    'Story Points'
 	) {
 	    $jira->field($JIRA{fields}{$field} => $row->{$field}) if $row->{$field};
